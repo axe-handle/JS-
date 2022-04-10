@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        ul {
+            list-style: none;
+        }
+
+        .timepiece {
+            position: relative;
+            width: 401px;
+            height: 401px;
+            border: 1px solid #333;
+            border-radius: 50%;
+            margin: 0 auto;
+        }
+
+        .constantly .li {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translate(-50%);
+            width: 1px;
+            height: 9px;
+            background-color: #333;
+            transform-origin: center 200px;
+        }
+
+        .constantly .lip {
+            width: 3px;
+            height: 12px;
+        }
+
+        .interval {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background-color: #ccc;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 100px;
+        }
+
+        .constantly .lis {
+            width: 8px;
+            height: 14px;
+            background-color: aqua;
+        }
+
+        .second {
+            position: absolute;
+            left: 50%;
+            top: 0px;
+            transform: translateX(-50%);
+            transform-origin: center 200px;
+            width: 8px;
+            height: 18px;
+            background-color: aqua;
+            /* border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px; */
+            border-radius: 8px;
+
+        }
+
+        .minute {
+            position: absolute;
+            left: 50%;
+            top: 79px;
+            transform: translate(-50%);
+            width: 5px;
+            height: 67px;
+            background-color: #333;
+            border-radius: 2px;
+            transform-origin: center 121px;
+        }
+
+        .hours {
+            position: absolute;
+            left: 50%;
+            top: 122px;
+            transform: translate(-50%);
+            width: 16px;
+            height: 24px;
+            background-color: aquamarine;
+            border-radius: 2px;
+            transform-origin: center 78px;
+
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="timepiece">
+        <!-- 钟表的时刻 -->
+        <ul class="constantly"></ul>
+        <!-- 钟表的中间 -->
+        <div class="interval"></div>
+        <!-- 绘制一个分钟的指针 -->
+        <div class="minute"></div>
+        <!-- 绘制一个时钟的指针 -->
+        <div class="hours"></div>
+    </div>
+    <script>
+        let ul = document.querySelector('.constantly')
+        let interval = document.querySelector('.interval')
+        let minute = document.querySelector('.minute')
+        let hours = document.querySelector('.hours')
+        // 遍历实现时钟刻度
+        for (let i = 0; i < 60; i++) {
+            let li = document.createElement('li')
+            li.style.transform = `translate(-50%) rotate(${i * 6}deg)`
+            ul.appendChild(li)
+            ul.children[i].classList.add('li')
+        }
+
+        for (let j = 0; j < 12; j++) {
+            ul.children[j * 5].classList.add('lip')
+        }
+        // 封装一个格式化当前时间的函数
+        function getTimes() {
+            // 初始化时间
+            let date = new Date()
+            let hours = date.getHours()
+            let minute = date.getMinutes()
+            let second = date.getSeconds()
+            // 格式化时间
+            // hours = hours < 10 ? '0' + hours : hours
+            // minute = minute < 10 ? '0' + minute : minute
+            // second = second < 10 ? '0' + second : second
+            // 返回一个时间对象
+            return { hours: hours, minute: minute, second: second }
+        }
+        // 设置定时器让时钟实时动起来
+        setInterval(() => {
+            //定义一个变量存放秒钟
+            let i = getTimes().second
+            interval.innerText = `${getTimes().hours < 10 ? '0' + getTimes().hours : getTimes().hours}:${getTimes().minute < 10 ? '0' + getTimes().minute : getTimes().minute}`
+            //在添加秒钟样式的时候把上一个的刻度的秒钟样式移除
+            ul.children[i - 1 === -1 ? 59 : i - 1].classList.remove('lis')
+            //添加秒钟样式
+            ul.children[i].classList.add('lis')
+            minute.style.transform = `translate(-50%) rotate(${getTimes().minute * 6}deg)`
+
+            let h = getTimes().hours > 12 ? getTimes().hours - 12 : getTimes().hours
+            // 把一个小时划分为无份，每一份占六度
+            let h1 = getTimes().minute / 12 * 6
+            hours.style.transform = `translate(-50%) rotate(${h * 30 + h1}deg)`
+
+        }, 1000);
+
+    </script>
+</body>
+
+</html>

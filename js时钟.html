@@ -145,7 +145,11 @@
             let i = getTimes().second
             interval.innerText = `${getTimes().hours < 10 ? '0' + getTimes().hours : getTimes().hours}:${getTimes().minute < 10 ? '0' + getTimes().minute : getTimes().minute}`
             //在添加秒钟样式的时候把上一个的刻度的秒钟样式移除
-            ul.children[i - 1 === -1 ? 59 : i - 1].classList.remove('lis')
+            // ul.children[i - 1 === -1 ? 59 : i - 1].classList.remove('lis')
+            // 把所有li标签的秒钟清除一遍
+            for (let i = 0; i < 60; i++) {
+                ul.children[i].classList.remove('lis')
+            }
             //添加秒钟样式
             ul.children[i].classList.add('lis')
             minute.style.transform = `translate(-50%) rotate(${getTimes().minute * 6}deg)`
